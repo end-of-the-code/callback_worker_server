@@ -1,5 +1,5 @@
 server:
-  port: 8088
+  port: 8082
 
 spring:
   application:
@@ -45,6 +45,12 @@ spring:
 app:
   kafka:
     consumer-topic: callback-topic
+
+  broadcast:
+    target-nodes:
+      - "http://localhost:8083"
+      - "http://localhost:8084"
+      - "http://localhost:8085"
 
 logging:
   level:
