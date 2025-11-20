@@ -28,15 +28,15 @@ public class KafkaConsumerConfig {
    * 'CallbackPayload.class'를 직접 참조하므로 오타/경로 에러가 원천 차단됩니다.
    */
   @Bean
-  public ConsumerFactory<String, CallbackRequest> consumerFactory() {
+  public ConsumerFactory<String, CallbackPayload> consumerFactory() {
     Map<String, Object> props = new HashMap<>();
     props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
     props.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
     props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
 
     // 1. ErrorHandlingDeserializer 설정
-    ErrorHandlingDeserializer<CallbackRequest> errorHandlingDeserializer = new ErrorHandlingDeserializer<>(
-        new JsonDeserializer<>(CallbackRequest.class, false) // false: 헤더 무시 설정
+    ErrorHandlingDeserializer<CallbackPayload> errorHandlingDeserializer = new ErrorHandlingDeserializer<>(
+        new JsonDeserializer<>(CallbackPayload.class, false) // false: 헤더 무시 설정
     );
 
     // 2. Key: String, Value: ErrorHandler(Json)
@@ -48,8 +48,8 @@ public class KafkaConsumerConfig {
   }
 
   @Bean
-  public ConcurrentKafkaListenerContainerFactory<String, CallbackRequest> kafkaListenerContainerFactory() {
-    ConcurrentKafkaListenerContainerFactory<String, CallbackRequest> factory =
+  public ConcurrentKafkaListenerContainerFactory<String, CallbackPayload> kafkaListenerContainerFactory() {
+    ConcurrentKafkaListenerContainerFactory<String, CallbackPayload> factory =
         new ConcurrentKafkaListenerContainerFactory<>();
     factory.setConsumerFactory(consumerFactory());
     return factory;

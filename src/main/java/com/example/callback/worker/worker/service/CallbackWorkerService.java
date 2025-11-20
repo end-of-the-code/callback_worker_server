@@ -1,6 +1,6 @@
 package com.example.callback.worker.worker.service;
 
-import com.example.callback.worker.infrastructure.queue.kafka.CallbackRequest;
+import com.example.callback.worker.infrastructure.queue.kafka.CallbackPayload;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -20,18 +20,18 @@ public class CallbackWorkerService {
    * - 오직 데이터를 받아서 DB에 저장하거나 처리하는 일만 수행합니다.
    */
   @Transactional
-  public void process(CallbackRequest payload) {
+  public void process(CallbackPayload payload) {
     log.info(">>> [Service]  2. 비즈니스 로직 시작 (DB 저장 등)");
 
     // payload에서 필요한 데이터 꺼내기 (Null 체크 등은 필요에 따라 추가)
-    String userId = payload.getUserId();
+    String txId = payload.getTxId();
     String message = payload.getMessage();
 
-    log.info(">>> 처리할 데이터: userId={}, message={}", userId, message);
+    log.info(">>> 처리할 데이터: txId={}, message={}", txId, message);
 
     /* * [DB 저장 예시 코드]
      * * CallbackLog logEntity = CallbackLog.builder()
-     * .userId(userId)
+     * .txId(txId)
      * .message(message)
      * .build();
      * * callbackLogRepository.save(logEntity);

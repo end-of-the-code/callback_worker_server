@@ -24,7 +24,7 @@ public class CallbackWorkerKafkaConsumer {
       groupId = "worker-group",
       concurrency = "1"
   )
-  public void consume(CallbackRequest payload) {
+  public void consume(CallbackPayload payload) {
     log.info("==========================================");
     log.info(">>> [Consumer] 1. 카프카 메시지 수신 완료!");
     log.info(">>> Data: {}", payload);
