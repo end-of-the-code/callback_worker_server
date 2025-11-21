@@ -1,5 +1,7 @@
 package com.example.callback.worker.worker.service;
 
+import com.example.callback.worker.infrastructure.broadcast.HttpBroadcaster;
+import com.example.callback.worker.infrastructure.broadcast.NodeRegistry;
 import com.example.callback.worker.infrastructure.queue.kafka.CallbackPayload;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +15,7 @@ public class CallbackWorkerService {
 
   // DB 처리가 필요하다면 Repository 주입
   // private final CallbackLogRepository callbackLogRepository;
+  private final HttpBroadcaster broadcaster;
 
   /**
    * [역할 2: 실제 비즈니스 로직 처리]
@@ -36,6 +39,7 @@ public class CallbackWorkerService {
      * .build();
      * * callbackLogRepository.save(logEntity);
      */
+    broadcaster.broadcast(payload);
 
     log.info(">>> [Service]  3. 처리 완료!");
     log.info("==========================================");

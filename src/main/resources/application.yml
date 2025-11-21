@@ -43,14 +43,14 @@ spring:
       ack-mode: RECORD
 
 app:
-  kafka:
-    consumer-topic: callback-topic
-
   broadcast:
     target-nodes:
       - "http://localhost:8083"
       - "http://localhost:8084"
       - "http://localhost:8085"
+  kafka:
+    consumer-topic: callback-topic
+
 
 logging:
   level:
