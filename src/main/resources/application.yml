@@ -5,35 +5,35 @@ spring:
   application:
     name: callback-worker
 
+  # datasource
+  datasource:
+    username: user
+    password: password
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3305/callback_db?useUnicode=true&serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true
+    hikari:
+      connection-timeout: 3000
+      validation-timeout: 2000
+  # jpa
+  jpa:
+    database: mysql
+    open-in-view: false
+    show-sql: true
+
   kafka:
     bootstrap-servers: localhost:9092
     consumer:
       group-id: worker-group
-      # earliest: ?? ???? / latest: ???? ???? ??
       auto-offset-reset: earliest
-
-      # [??] ?? ??? ?? (??? ???, ?? ?? ? null? ???? ???? ?????)
       key-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
-
       properties:
-        # [Delegate ??] ?? ??? ?? ? ????
         spring.deserializer.key.delegate.class: org.apache.kafka.common.serialization.StringDeserializer
         spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JsonDeserializer
-
         spring.json.trusted.packages: "*"
-
-        # [?? 1] ??? ??! (Boolean ??? ????? ?)
-        # Producer? ?? ??? ??(??)? ? ?????.
         spring.json.use.type.headers: false
-
-        # [?? 2] ??? ?????, ??? ? ???? ????? ??
         spring.json.value.default.type: com.example.callback.worker.infrastructure.queue.kafka.CallbackPayload
 
-        # [??] type.mapping? ??????.
-        # use.type.headers: false? ??? ? ? ??, default.type? ??? ?????.
-
-    # (Producer ?? ??)
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
@@ -50,7 +50,6 @@ app:
       - "http://localhost:8085"
   kafka:
     consumer-topic: callback-topic
-
 
 logging:
   level:

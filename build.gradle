@@ -31,11 +31,16 @@ dependencies {
     // HttpBroadcaster에서 비동기 HTTP 요청을 보내기 위해 필수입니다.
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
 
+    // db
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
     // Kafka (핵심: 컨슈머 기능 포함)
     implementation 'org.springframework.kafka:spring-kafka'
 
-	compileOnly 'org.projectlombok:lombok'
-	annotationProcessor 'org.projectlombok:lombok'
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    runtimeOnly 'com.mysql:mysql-connector-j'
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
