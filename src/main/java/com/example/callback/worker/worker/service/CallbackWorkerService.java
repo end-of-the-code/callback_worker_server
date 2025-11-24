@@ -22,7 +22,6 @@ public class CallbackWorkerService {
    * - [중요] KafkaListener 어노테이션을 제거했습니다.
    * - 오직 데이터를 받아서 DB에 저장하거나 처리하는 일만 수행합니다.
    */
-  @Transactional
   public void process(CallbackPayload payload) {
     log.info(">>> [Service]  2. 비즈니스 로직 시작 (DB 저장 등)");
 
