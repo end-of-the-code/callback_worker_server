@@ -19,6 +19,8 @@ spring:
     database: mysql
     open-in-view: false
     show-sql: true
+    hibernate:
+      ddl-auto: update
 
   kafka:
     bootstrap-servers: localhost:9092
