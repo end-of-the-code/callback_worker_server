@@ -27,14 +27,31 @@ spring:
     consumer:
       group-id: worker-group
       auto-offset-reset: earliest
+
+      # [추가 1] 자동 커밋 끄기 (스프링 컨테이너가 AckMode에 따라 제어하도록 함)
+      enable-auto-commit: false
+
+      # [추가 2] 한 번에 가져오는 데이터 양 줄이기 (기본 500 -> 50)
+      # 이유: HTTP 전송은 느리기 때문에, 한 번에 많이 가져오면 타임아웃 걸릴 확률이 높음
+      max-poll-records: 50
+
       key-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+
       properties:
         spring.deserializer.key.delegate.class: org.apache.kafka.common.serialization.StringDeserializer
         spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JsonDeserializer
         spring.json.trusted.packages: "*"
         spring.json.use.type.headers: false
         spring.json.value.default.type: com.example.callback.worker.infrastructure.queue.kafka.CallbackPayload
+
+        # [추가 3] 처리 시간 제한 늘리기 (기본 5분 -> 10분)
+        # 이유: 50개를 처리하는 데 5분이 넘어가도 "살아있다"고 판단하게 함
+        max.poll.interval.ms: 600000
+
+        # [추가 4] 세션 타임아웃 (기본 10초/45초 -> 45초)
+        # 이유: 하트비트가 조금 늦어도 봐줌
+        session.timeout.ms: 45000
 
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
