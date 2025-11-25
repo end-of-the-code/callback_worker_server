@@ -53,6 +53,11 @@ spring:
         # 이유: 하트비트가 조금 늦어도 봐줌
         session.timeout.ms: 45000
 
+        # 재연결 5초
+        reconnect.backoff.ms: 5000
+        # 2. 최대 대기 시간 (기본값 1000ms -> 10000ms = 10초)
+        reconnect.backoff.max.ms: 10000
+
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer

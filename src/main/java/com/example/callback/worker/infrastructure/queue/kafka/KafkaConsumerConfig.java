@@ -6,6 +6,7 @@ import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.TopicPartition;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
@@ -34,6 +35,9 @@ public class KafkaConsumerConfig {
   @Value("${spring.kafka.consumer.group-id}")
   private String groupId;
 
+  // [핵심 1] application.yml의 모든 kafka 설정을 담고 있는 객체를 주입받음
+  private final KafkaProperties kafkaProperties;
+
   // [필수] DLQ 발행을 위해 KafkaTemplate 주입 (이게 있어야 실패 메시지를 딴 곳으로 보냄)
   private final KafkaTemplate<String, Object> kafkaTemplate;
 
@@ -44,7 +48,7 @@ public class KafkaConsumerConfig {
    */
   @Bean
   public ConsumerFactory<String, CallbackPayload> consumerFactory() {
-    Map<String, Object> props = new HashMap<>();
+    Map<String, Object> props = kafkaProperties.buildConsumerProperties(null);
     props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
     props.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
     props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
